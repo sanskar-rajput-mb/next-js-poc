@@ -1,0 +1,371 @@
+:root {
+  --paper: #f4f6f9;
+  --surface: #ffffff;
+  --surface-2: #f8fafc;
+  --ink: #13212e;
+  --muted: #5a6878;
+  --subtle: #8a96a5;
+  --line: #e1e7ee;
+  --accent: #004a80;
+  --accent-strong: #003a66;
+  --accent-soft: #e6eff7;
+  --on-accent: #ffffff;
+
+  /* Triage colour is data, not decoration: it encodes clinical priority. */
+  --urgent: #b3382a;
+  --urgent-soft: #fcefec;
+  --review: #9d6410;
+  --review-soft: #fcf3e3;
+  --routine: #2d7a5e;
+  --routine-soft: #e7f3ed;
+
+  --radius: 10px;
+  --radius-sm: 7px;
+  --shadow-sm: 0 1px 2px rgb(16 32 38 / .05);
+  --shadow: 0 1px 2px rgb(16 32 38 / .04), 0 6px 20px -8px rgb(16 32 38 / .12);
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent); text-underline-offset: 3px; }
+h1, h2, h3 { line-height: 1.2; margin: 0; font-weight: 650; letter-spacing: -0.015em; }
+h1 { font-size: 1.75rem; }
+h2 { font-size: 1rem; }
+p { margin: 0 0 1rem; max-width: 62ch; }
+strong { font-weight: 600; }
+
+.shell { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; }
+main.shell { padding-top: 2rem; padding-bottom: 4rem; }
+
+/* ---------- Header ---------- */
+
+header.top {
+  position: sticky; top: 0; z-index: 10;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+header.top .shell { display: flex; align-items: center; gap: 2rem; height: 60px; }
+
+.brand { display: flex; align-items: center; gap: .6rem; text-decoration: none; color: var(--ink); }
+.brand-mark {
+  display: grid; place-items: center; width: 30px; height: 30px; border-radius: 8px;
+  background: var(--accent); color: var(--on-accent);
+}
+.brand strong { font-size: 1rem; letter-spacing: -0.01em; }
+.brand small { display: block; font-size: .72rem; color: var(--muted); line-height: 1; margin-top: 2px; }
+
+.nav { display: flex; gap: .25rem; font-size: .9rem; }
+.sign-out { margin-left: auto; }
+.nav a {
+  text-decoration: none; color: var(--muted); font-weight: 500;
+  padding: .4rem .75rem; border-radius: var(--radius-sm);
+  transition: background-color .15s, color .15s;
+}
+.nav a:hover { color: var(--ink); background: var(--surface-2); }
+.nav a[aria-current="page"] { color: var(--accent-strong); background: var(--accent-soft); }
+
+/* ---------- Page scaffolding ---------- */
+
+.page-head {
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem;
+  flex-wrap: wrap; margin-bottom: 1.75rem;
+}
+.page-head h1 { margin-bottom: .35rem; }
+.eyebrow {
+  margin: 0 0 .35rem; font-size: .78rem; font-weight: 600; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--accent);
+}
+.lede { color: var(--muted); margin: 0; }
+
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+.split { display: grid; grid-template-columns: minmax(0, 1fr) 22rem; gap: 1.25rem; align-items: start; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 1.25rem;
+}
+.card.flush { padding: 0; overflow: hidden; }
+.card-head {
+  display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  margin-bottom: .75rem;
+}
+.card.flush .card-head { padding: 1rem 1.25rem; margin: 0; border-bottom: 1px solid var(--line); }
+.card-link { font-size: .85rem; font-weight: 500; text-decoration: none; }
+.card-link:hover { text-decoration: underline; }
+
+.meta { color: var(--muted); font-size: .85rem; }
+.grow { flex: 1; min-width: 0; }
+.stack { display: flex; flex-direction: column; min-width: 0; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ---------- Stats ---------- */
+
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin-bottom: 1.25rem; }
+.stat { position: relative; padding: 1rem 1.25rem 1.1rem; }
+.stat-label { font-size: .82rem; color: var(--muted); font-weight: 500; display: flex; align-items: center; gap: .45rem; }
+.stat-value { font-size: 2rem; font-weight: 650; letter-spacing: -0.03em; line-height: 1.1; margin-top: .4rem; font-variant-numeric: tabular-nums; }
+.stat-hint { font-size: .78rem; color: var(--subtle); margin-top: .15rem; }
+.stat .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--subtle); }
+.stat.urgent .dot { background: var(--urgent); }
+.stat.urgent .stat-value { color: var(--urgent); }
+.stat.review .dot { background: var(--review); }
+.stat.accent .dot { background: var(--accent); }
+
+/* ---------- Rows & lists ---------- */
+
+ul.rows { list-style: none; padding: 0; margin: 0; }
+ul.rows > li + li { border-top: 1px solid var(--line); }
+.card:not(.flush) ul.rows { margin: 0 -1.25rem -1.25rem; }
+
+.item {
+  display: flex; align-items: center; gap: .9rem;
+  padding: .8rem 1.25rem; color: inherit; text-decoration: none;
+}
+a.item { transition: background-color .12s; }
+a.item:hover { background: var(--surface-2); }
+.item.past { opacity: .55; }
+.item.pending { opacity: .6; background: var(--surface-2); }
+
+.chip {
+  font-size: .75rem; font-weight: 600; padding: .15rem .55rem; border-radius: 999px;
+  background: var(--accent-soft); color: var(--accent-strong); white-space: nowrap;
+}
+.chip.muted { background: var(--surface-2); color: var(--muted); border: 1px solid var(--line); }
+
+.avatar {
+  flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%;
+  background: var(--accent-soft); color: var(--accent-strong);
+  font-size: .8rem; font-weight: 650; letter-spacing: .02em;
+}
+.avatar.lg { width: 64px; height: 64px; font-size: 1.3rem; }
+
+.date-block {
+  flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  width: 46px; height: 48px; border-radius: var(--radius-sm);
+  border: 1px solid var(--line); background: var(--surface-2); line-height: 1.05;
+}
+.date-block span { font-size: .66rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); }
+.date-block strong { font-size: 1.15rem; font-weight: 650; font-variant-numeric: tabular-nums; }
+
+.triage {
+  display: inline-flex; align-items: center; gap: .4rem; flex: none;
+  font-size: .75rem; font-weight: 600; padding: .2rem .6rem .2rem .5rem; border-radius: 999px;
+  white-space: nowrap;
+}
+.triage::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.triage.urgent  { color: var(--urgent);  background: var(--urgent-soft); }
+.triage.review  { color: var(--review);  background: var(--review-soft); }
+.triage.routine { color: var(--routine); background: var(--routine-soft); }
+
+/* ---------- Patient register ---------- */
+
+.toolbar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+
+.patient-grid {
+  display: grid; align-items: center; gap: 1rem;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.6fr) minmax(0, .8fr) 5.5rem 16px;
+}
+.table-head {
+  padding: .6rem 1.25rem; background: var(--surface-2); border-bottom: 1px solid var(--line);
+  font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--subtle);
+}
+.patient-row { padding: .85rem 1.25rem; color: inherit; text-decoration: none; transition: background-color .12s; }
+.patient-row:hover { background: var(--surface-2); }
+.patient-row:hover .chev { color: var(--accent); transform: translateX(2px); }
+.patient-row .who { display: flex; align-items: center; gap: .75rem; min-width: 0; }
+.patient-row .cond { font-size: .9rem; }
+.patient-row .triage { justify-self: start; }
+.chev { color: var(--subtle); display: flex; transition: transform .15s, color .15s; }
+.list-foot { margin: .75rem .25rem 0; }
+
+.search-box { position: relative; width: 100%; max-width: 24rem; }
+.search-box svg { position: absolute; left: .75rem; top: 50%; translate: 0 -50%; color: var(--subtle); pointer-events: none; }
+.search-box input { width: 100%; padding-left: 2.3rem; }
+
+/* ---------- Patient record ---------- */
+
+.back {
+  display: inline-flex; align-items: center; gap: .35rem; margin-bottom: 1.25rem;
+  font-size: .85rem; font-weight: 500; color: var(--muted); text-decoration: none;
+}
+.back:hover { color: var(--ink); }
+
+.profile { margin-bottom: 1.25rem; }
+.profile-top { display: flex; align-items: center; gap: 1.1rem; flex-wrap: wrap; }
+.profile-top .title-row { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; margin-bottom: .2rem; }
+.facts {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem;
+  margin: 1.25rem -1.25rem -1.25rem; padding: 1rem 1.25rem;
+  border-top: 1px solid var(--line); background: var(--surface-2);
+  border-radius: 0 0 var(--radius) var(--radius);
+}
+.facts dt { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--subtle); }
+.facts dd { margin: .15rem 0 0; font-weight: 500; }
+.problem { font-size: 1.05rem; margin: 0; }
+
+/* ---------- Forms & buttons ---------- */
+
+form.book { display: grid; gap: 1rem; }
+label { display: grid; gap: .35rem; font-size: .85rem; font-weight: 500; }
+input, textarea, select {
+  font: inherit; font-size: .92rem; padding: .6rem .75rem; border: 1px solid var(--line);
+  border-radius: var(--radius-sm); background: var(--surface); color: inherit;
+  transition: border-color .15s, box-shadow .15s;
+}
+input::placeholder { color: var(--subtle); }
+input:hover, textarea:hover, select:hover { border-color: color-mix(in srgb, var(--line), var(--ink) 20%); }
+input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent); }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+button, .btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .45rem;
+  font: inherit; font-size: .9rem; font-weight: 600; padding: .6rem 1rem; border: 1px solid transparent;
+  border-radius: var(--radius-sm); background: var(--accent); color: var(--on-accent);
+  cursor: pointer; text-decoration: none; box-shadow: var(--shadow-sm);
+  transition: background-color .15s;
+}
+button:hover, .btn:hover { background: var(--accent-strong); }
+.btn.secondary { background: var(--surface); color: var(--ink); border-color: var(--line); }
+.btn.secondary:hover { background: var(--surface-2); }
+.btn.ghost { background: transparent; color: var(--muted); box-shadow: none; font-weight: 500; padding: .45rem .7rem; }
+.btn.ghost:hover { background: var(--surface-2); color: var(--ink); }
+button[disabled] { opacity: .6; cursor: progress; }
+form.book button { width: 100%; margin-top: .25rem; }
+
+.error {
+  display: flex; align-items: center; gap: .5rem; margin: 0;
+  color: var(--urgent); background: var(--urgent-soft); font-size: .85rem;
+  padding: .55rem .75rem; border-radius: var(--radius-sm);
+}
+.notice {
+  display: flex; align-items: center; gap: .55rem; max-width: none;
+  background: var(--routine-soft); color: var(--routine); font-weight: 500;
+  border: 1px solid color-mix(in srgb, var(--routine) 30%, transparent);
+  border-radius: var(--radius); padding: .7rem 1rem; font-size: .9rem; margin-bottom: 1.25rem;
+}
+.sticky { position: sticky; top: 80px; }
+
+/* ---------- Empty / error states ---------- */
+
+.empty { text-align: center; padding: 2.5rem 1.5rem; }
+.empty p { margin: .35rem auto 1.25rem; color: var(--muted); }
+.empty .icon {
+  display: inline-grid; place-items: center; width: 48px; height: 48px; border-radius: 50%;
+  background: var(--accent-soft); color: var(--accent); margin-bottom: .9rem;
+}
+.empty.danger .icon { background: var(--urgent-soft); color: var(--urgent); }
+.empty h1 { font-size: 1.3rem; }
+.empty.compact { padding: 1.5rem 1rem; }
+.empty.compact p { margin-bottom: 0; }
+
+/* ---------- Page transition (template.tsx) ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .page-enter { animation: page-enter .25s ease-out; }
+  @keyframes page-enter { from { opacity: 0; transform: translateY(6px); } }
+}
+
+/* ---------- Patient quick-view modal ---------- */
+
+dialog.modal {
+  width: min(34rem, calc(100vw - 2rem)); padding: 0; border: 0; border-radius: 14px;
+  background: var(--surface); color: var(--ink); box-shadow: 0 24px 60px -12px rgb(16 32 38 / .35);
+}
+dialog.modal::backdrop { background: rgb(15 30 45 / .45); backdrop-filter: blur(2px); }
+.modal-panel { position: relative; padding: 1.5rem; }
+.modal-title { font-size: 1.35rem; }
+.modal-close {
+  position: absolute; top: .9rem; right: .9rem; padding: .35rem; box-shadow: none;
+  background: transparent; color: var(--muted);
+}
+.modal-close:hover { background: var(--surface-2); color: var(--ink); }
+.modal-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 1.25rem -1.5rem 1.25rem; padding: 1rem 1.5rem; border-bottom: 1px solid var(--line); border-radius: 0; }
+.modal-sub { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--subtle); margin-bottom: .35rem; }
+.modal-actions { display: flex; justify-content: flex-end; margin-top: 1.5rem; }
+
+@media (prefers-reduced-motion: no-preference) {
+  dialog.modal[open] { animation: modal-in .18s ease-out; }
+  @keyframes modal-in { from { opacity: 0; transform: translateY(8px) scale(.98); } }
+}
+
+/* ---------- Sign-in ---------- */
+
+.auth { display: grid; grid-template-columns: 45% 1fr; min-height: 100vh; }
+.auth-art { position: relative; overflow: hidden; background: var(--accent); color: #fff; }
+.auth-art-copy {
+  position: relative; height: 100%; display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 3rem;
+}
+.brand-mark.lg { width: 48px; height: 48px; border-radius: 12px; background: #fff; color: var(--accent); margin-bottom: auto; }
+.auth-quote { font-size: 1.6rem; font-weight: 600; line-height: 1.3; letter-spacing: -0.02em; max-width: 22ch; }
+.auth-foot { font-size: .85rem; opacity: .7; margin: 0; }
+.auth-main { display: grid; place-items: center; padding: 2rem 1rem; }
+.auth-card { width: 100%; max-width: 22rem; }
+.auth-card h1 { margin-bottom: .2rem; }
+.auth-card form.book { gap: 1.1rem; }
+.hint { margin: 0; text-align: center; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85em; background: var(--surface-2); border: 1px solid var(--line); padding: .05rem .35rem; border-radius: 5px; }
+
+/* ---------- Loading ---------- */
+
+.skeleton-row { display: flex; align-items: center; gap: 1rem; padding: .95rem 1.25rem; }
+.skeleton { display: block; background: var(--line); border-radius: 6px; }
+.skeleton.circle { width: 36px; height: 36px; border-radius: 50%; flex: none; }
+.skeleton.line { height: 12px; }
+.skeleton.title { height: 28px; width: 14rem; margin-bottom: .6rem; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .skeleton { animation: pulse 1.4s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .45; } }
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid-2, .split { grid-template-columns: minmax(0, 1fr); }
+  .sticky { position: static; }
+  .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .auth { grid-template-columns: 1fr; }
+  .auth-art { display: none; }
+}
+
+@media (max-width: 640px) {
+  .shell { padding: 0 1rem; }
+  main.shell { padding-top: 1.5rem; }
+  header.top .shell { gap: .75rem; }
+  .brand small { display: none; }
+  .sign-out span { display: none; }
+  .nav a { padding: .4rem .55rem; }
+  h1 { font-size: 1.45rem; }
+  .stat-value { font-size: 1.6rem; }
+  .table-head { display: none; }
+  .patient-grid {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "who triage" "cond cond";
+    gap: .4rem .75rem;
+  }
+  .patient-row .who { grid-area: who; }
+  .patient-row .triage { grid-area: triage; }
+  .patient-row .cond { grid-area: cond; padding-left: calc(36px + .75rem); color: var(--muted); font-size: .85rem; }
+  .patient-row .clin, .patient-row .chev { display: none; }
+}
+
+@media (max-width: 420px) {
+  .brand > span:last-child { display: none; }
+}
