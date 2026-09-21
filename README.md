@@ -78,37 +78,6 @@ are written up in [docs/LEARNINGS.md](docs/LEARNINGS.md).
 | Root-layout error boundary | `app/global-error.tsx` |
 | 404s: app-wide and per segment | `app/not-found.tsx`, `app/(clinic)/patients/[id]/not-found.tsx` |
 
-## Things worth being able to say out loud
 
-- Components are **server-rendered by default**. `"use client"` is an opt-in for
-  the parts that need state, effects or event handlers, and it applies to
-  everything imported below that component too.
-- `npm run build` prints a symbol per route. Here you'll see all three:
-  `○` static (`/icon`, `/robots.txt`), `●` prerendered with ISR
-  (`/patients/[id]`, refreshed at most every minute), and `ƒ` rendered per
-  request — `/` because it reads the session cookie, `/patients`,
-  `/appointments` and `/login` because they await `searchParams`.
-- **Middleware sits in front of the cache.** That's why patient records can be
-  static HTML and still be private: the session check happens before the
-  cached page is served.
-- A **Server Action** replaces the usual "POST to /api, then refetch" round
-  trip. Booking an appointment mutates on the server, calls
-  `revalidateTag("appointments")` — which refreshes the cached data *and* every
-  page built from it, including the prerendered patient records — and
-  redirects. The route handler exists only to show that a public JSON API is
-  still available when something outside the app needs one.
-- The **patient modal** is two features working together: a parallel route
-  (`@modal`) gives the layout a second slot, and an intercepting route fills
-  it when you navigate to `/patients/[id]` from inside the app. The URL is
-  real — reload it and you get the full page.
-- In Next.js 15, `params`, `searchParams`, `cookies()` and `headers()` are
-  promises and must be awaited.
-
-## Not covered (yet)
-
-- **Partial Prerendering** and the **`"use cache"`** directive are still
-  experimental in Next.js 15.5 (canary only), so this POC uses the stable
-  `unstable_cache` instead.
-- **Real authentication.** The session cookie just holds a clinician's name;
   a real app would use signed, expiring sessions (e.g. Auth.js) and check
   permissions per record, not only per page.
